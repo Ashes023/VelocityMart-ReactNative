@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Dimensions, ScrollView } from "react-native";
 import React from "react";
 import { TextInput } from "react-native-gesture-handler";
 
 
 const Homie = () => {
   return (
-    <View style={styles.container}>
+    <ScrollView nestedScrollEnabled>
+      <View style={styles.container}>
       <Text style={styles.logo}>VelocityMart</Text>
       <View style={styles.searchBox}>
         <TextInput placeholder="Search.." style={styles.input} />
@@ -24,13 +25,28 @@ const Homie = () => {
         renderItem={({item,index})=>{
           return(
             <TouchableOpacity style={styles.listItems}>
-              <Image source={item.icon} style={{width:80,height:80}}/>
+              <Image source={item.icon} style={styles.listIcon}/>
+              <Text style={styles.listTitle}>{item.title}</Text>
             </TouchableOpacity>
           )
         }}
       />
       </View>
+      <Text style={styles.heading}>Posted Items</Text>
+      <FlatList data={[1,1,1,1,1]} renderItem={({item,index})=>{
+        return(
+          <TouchableOpacity style={styles.item}>
+            <Image source={require('../images/image.png')} style={styles.itemImage}/>
+            <View>
+              <Text style={styles.name}>{'Iphone 14 Pro'}</Text>
+              <Text style={styles.desc}>{'Bought months ago'}</Text>
+              <Text style={styles.price}>{'₹.'+'Price 70'}</Text>
+            </View>
+          </TouchableOpacity>
+        )
+      }}/>
     </View>
+    </ScrollView>
   );
 };
 
@@ -43,7 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "800",
     color: "blue",
-    marginTop: 50,
+    marginTop: 40,
     marginLeft: 20,
   },
   searchBox: {
@@ -70,7 +86,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     color: "#000",
     fontWeight: "600",
-    marginTop: 40,
+    marginTop: 30,
   },
   listItems:{
   width:Dimensions.get('window').width/3,height:100,
@@ -79,5 +95,37 @@ const styles = StyleSheet.create({
   backgroundColor:'grey',
   width: '31%',
   margin:4,
+  },
+  listIcon:{width:50, height:50},
+  listTitle:{marginTop:10, fontSize:16, fontWeight:'600'},
+  item:{
+    width: '90%',
+    height: 100,
+    backgroundColor: "#fff",
+    marginTop: 7,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  itemImage:{
+    margin: 17,
+    width: 70,
+    height: 70,
+  },
+  name:{
+    fontSize:18,
+    fontWeight: '600',
+    marginLeft: 10,
+  },
+  desc:{
+    fontSize:18,
+    marginLeft: 10,
+  },
+  price:{
+    fontSize:18,
+    fontWeight: '600',
+    marginLeft: 10,
+    color: 'green'
   }
 });
