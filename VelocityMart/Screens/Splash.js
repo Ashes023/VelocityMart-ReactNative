@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-        navigation.navigate('Home');
+        navigation.navigate('Authentication');
     },2000);
   },[]);
   return (
@@ -17,7 +17,7 @@ const Splash = ({navigation}) => {
 export default Splash;
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#0004FF",
+    backgroundColor: "#FF735C",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
