@@ -1,9 +1,16 @@
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, Dimensions, ScrollView } from "react-native";
 import React from "react";
 import { TextInput } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import { addWishlist } from "../redux/WishlistSlice";
 
 
 const Homie = () => {
+  const items=useSelector(state=>state.post);
+  const navigation=useNavigation();
+  const dispatch = useDispatch();
+
   return (
     <ScrollView nestedScrollEnabled>
       <View style={styles.container}>
@@ -16,15 +23,19 @@ const Homie = () => {
       <View style={{marginTop: 20}}>
       <FlatList
         numColumns={3}
-        data={[{title:"Car",icon:require('../images/search.png')},
-        {title:"Bike",icon:require('../images/search.png')},
-        {title:"Rome",icon:require('../images/search.png')},
-        {title:"People",icon:require('../images/search.png')},
-        {title:"Paris",icon:require('../images/search.png')},{
-          title:"Himalaya",icon:require('../images/search.png')}]}
+        data={[{title:"Electrical",icon:require('../images/resistor.png')},
+        {title:"Sports & Gym",icon:require('../images/crossfit.png')},
+        {title:"Academic",icon:require('../images/openbook.png')},
+        {title:"Amenities",icon:require('../images/bucket.png')},
+        {title:"Mechinal",icon:require('../images/mechanicalgears.png')},{
+          title:"Others",icon:require('../images/menu.png')}]}
         renderItem={({item,index})=>{
           return(
-            <TouchableOpacity style={styles.listItems}>
+            <TouchableOpacity style={styles.listItems} onPress={()=>{
+              navigation.navigate('ItemsByCategory',{
+                category: item.title,
+              })
+            }}>
               <Image source={item.icon} style={styles.listIcon}/>
               <Text style={styles.listTitle}>{item.title}</Text>
             </TouchableOpacity>
@@ -33,15 +44,19 @@ const Homie = () => {
       />
       </View>
       <Text style={styles.heading}>Posted Items</Text>
-      <FlatList data={[1,1,1,1,1]} renderItem={({item,index})=>{
+      <FlatList data={items.data} renderItem={({item,index})=>{
         return(
           <TouchableOpacity style={styles.item}>
-            <Image source={require('../images/image.png')} style={styles.itemImage}/>
+            <Image source={{uri:item.image}} style={styles.itemImage}/>
             <View>
-              <Text style={styles.name}>{'Iphone 14 Pro'}</Text>
-              <Text style={styles.desc}>{'Bought months ago'}</Text>
-              <Text style={styles.price}>{'₹.'+'Price 70'}</Text>
+              <Text style={styles.name}>{item.title}</Text>
+              <Text style={styles.desc}>{item.description}</Text>
             </View>
+            <TouchableOpacity style={styles.wishlist} onPress={()=>{
+              dispatch(addWishlist(item))
+            }}>
+              <Image source={require('../images/heart.png')} style={styles.icon}/>
+            </TouchableOpacity>
           </TouchableOpacity>
         )
       }}/>
@@ -58,7 +73,7 @@ const styles = StyleSheet.create({
   logo: {
     fontSize: 30,
     fontWeight: "800",
-    color: "blue",
+    color: "#FF735C",
     marginTop: 40,
     marginLeft: 20,
   },
@@ -92,7 +107,7 @@ const styles = StyleSheet.create({
   width:Dimensions.get('window').width/3,height:100,
   justifyContent:'center',
   alignItems:'center',
-  backgroundColor:'grey',
+  backgroundColor:'#F97760',
   width: '31%',
   margin:4,
   },
@@ -101,7 +116,7 @@ const styles = StyleSheet.create({
   item:{
     width: '90%',
     height: 100,
-    backgroundColor: "#fff",
+    backgroundColor: "#F97760",
     marginTop: 7,
     alignSelf: 'center',
     flexDirection: 'row',
@@ -122,10 +137,9 @@ const styles = StyleSheet.create({
     fontSize:18,
     marginLeft: 10,
   },
-  price:{
-    fontSize:18,
-    fontWeight: '600',
-    marginLeft: 10,
-    color: 'green'
+  wishlist:{
+    position:'absolute',
+    right:20,
+    top:20,
   }
 });
